@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            font-family:cursive;
+        }
+        h1{
+            text-align: center;
+        }
+        .tuile {
+            background-color: rgb(220, 220, 220);
+            border-radius: 20px;
+            padding:10px;
+            margin: 5px;
+            text-align: center;
+        }
+        .bouton {
+            background-color: rgb(143, 252, 176);
+            border-radius: 20px;
+            padding:10px;
+            margin: 5px;
+            text-align: center;
+        }
+        #result{
+            visibility:hidden;
+            font-size:"12";
+        }
+        .etiquette{
+            width: 50vh;
+        }
+        #v1 {
+            background-color: rgb(68, 253, 167);
+            height: 5vh;
+        }
+        summary{
+            background-color: rgb(143, 194, 252);
+        }
+    </style>
+</head>
+<body onLoad=init()>
+    <h1>Mes intelligences multiples</h1>
+    <div><small>  Ce test est créé par Howard Gardner et traduit et adapté par Gervais Sirois. </br>
+        Attention : ce test n'est pas comptible avec le navigateur Internet Exploreur</br></small>
+        Cochez chacune des questions qui se rapportent à votre situation et validez votre réponse.</div>
+    <div id="quest"></div>
+    <div class="bouton" onclick="calcul()">Valide</div>
+    <div id="result">
+        <svg xmlns="http://www.w3.org/2000/svg" width="95vw" height="180px" version="1.1">
+            <text x="0" y="20">Interpersonnelle</text>
+            <text x="0" y="40">Intrapersonnelle</text>
+            <text x="0" y="60">Spatiale</text>
+            <text x="0" y="80">Musicale</text>
+            <text x="0" y="100">Ecologique</text>
+            <text x="0" y="120">Kinesthesique</text>
+            <text x="0" y="140">Verbale</text>
+            <text x="0" y="160">Logique</text>
+            <g color="green">
+                <rect x="150" y="10" width="100" height="15" fill="currentColor" id="bar1"></rect>
+                <rect x="150" y="30" width="100" height="15" fill="currentColor" id="bar2"></rect>
+                <rect x="150" y="50" width="100" height="15" fill="currentColor" id="bar3"></rect>
+                <rect x="150" y="70" width="100" height="15" fill="currentColor" id="bar4"></rect>
+                <rect x="150" y="90" width="100" height="15" fill="currentColor" id="bar5"></rect>
+                <rect x="150" y="110" width="100" height="15" fill="currentColor" id="bar6"></rect>
+                <rect x="150" y="130" width="100" height="15" fill="currentColor" id="bar7"></rect>
+                <rect x="150" y="150" width="100" height="15" fill="currentColor" id="bar8"></rect>
+            </g>
+        </svg> 
+        <div>Cliquer sur la barre pour avoir des informations sur l'intelligence correspondante</div>
+        <div id="notice"></div>
+    </div>
+</body>
+<script>
+    var notice1 =   `<h2>Intelligence Interpersonnelle</h2>
+        <details><summary>Définition</summary>
+            Il s’agit de l’aptitude à discerner l’humeur, le tempérament, la motivation et le désir des autres personnes et à y répondre
+            correctement. Cette intelligence permet l’attachement et la création de liens. Elle assoit ses bases au cours des premières
+            années de la vie, de façon parallèle à l’intelligence intrapersonnelle dont elle est partiellement issue. Voici quelques
+            caractéristiques des personnes à forte intelligence interpersonnelle :
+            <ul><li>aime la vie de groupe, est très sociable;</li>
+                <li>travaille facilement en coopération;</li>
+                <li>s’intéresse à la communauté immédiate ou élargie;</li>
+                <li>capacité à voir les situations d’un autre point de vue, avec objectivité;</li>
+                <li>communique efficacement;</li>
+                <li>habileté à créer et maintenir la synergie d’un groupe (leadership);
+                <li>sensibilité aux humeurs et aux motivations des autres;</li>
+                <li>établit des relations profondes et sincères;</li>
+                <li>sens de l’écoute et empathie;</li>
+                <li>aptitude à obtenir naturellement l’approbation ou l’adhésion des autres;</li>
+                <li>favorise la résolution de problèmes par un esprit de coopération.</li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Acteur, ethnologue, arbitre, barman, chef d’entreprise, conseiller touristique, consultant, éducateur, enseignant, médiateur,
+            metteur en scène, assistante sociale, policier, psychologue, réceptionniste, sociologue, thérapeute, animateur social, auxiliaire
+            de vie, directeur ou membre d’une association caritative ou humanitaire.
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Pratiquer l’écoute ouverte, vraie et complète, par exemple en interviewant des gens que l’on connaît; dresser un compterendu
+            et le présenter.</li>
+            <li>Explorer divers modes de communication.</li>
+            <li>Dans un lieu public, observer les gens en tentant de percevoir la teneur d’un dialogue entre deux personnes, les émotions
+            qu’ils ressentent, ce qu’exprime leur langage non verbal (posture, gestes, mimique, etc..).</li>
+            <li>Sourire plus souvent et observer l’effet de ce comportement chez les autres.</li>
+            <li>Observer son comportement ou son langage non verbal et ce qu’il provoque chez les autres.</li>
+            <li>Lors de discussions, favoriser le compromis, sans trahir ses engagements pour autant.</li>
+            <li>Consulter autour de soi pour s’aider à résoudre des difficultés.</li></ul>
+        </details>`;
+    var notice2 =   `<h2>Intelligence Intrapersonnelle</h2>
+        <details><summary>Définition</summary>
+            Cette intelligence se décrit comme l’aptitude à accéder à ses propres sentiments et à reconnaître ses émotions, ses forces, ses
+            faiblesses. C’est la connaissance de soi-même. Les éléments de base de cette forme d’intelligence s’installent avant l’âge de
+            trois ans. L’intelligence intrapersonnelle se traduit au départ par l’établissement d’une limite entre soi et les autres. La logique
+            se mêle à l’intuition, à la compréhension de soi. C’est aussi une capacité d’adaptation aux épreuves, aux souvenirs, aux
+            événements, aux passions. Son expression requiert la participation d’autres formes d’intelligence.
+            Voici quelques caractéristiques d’un individu dont l’intelligence intrapersonnelle domine :
+            <ul><li>aime travailler seul;</li>
+                <li>aime apprendre à apprendre;</li>
+                <li>excellente concentration, autodiscipline;</li>
+                <li>sens poussé de l’autocritique, tolère difficilement l’échec, se remet continuellement en question;</li>
+                <li>introverti;</li>
+                <li>capacité de développer sa confiance en soi et l’estime de soi;</li>
+                <li>connaissance de ses valeurs et de leur application au quotidien;</li>
+                <li>à l’écoute de ses émotions, de ses sentiments, de ses idées, de ses rêves et idéaux;</li>
+                <li>contrôle maximum sur sa destinée et sur les moyens à prendre pour progresser;</li>
+                <li>capacité à composer avec le doute;</li>
+                <li>grande intuition et auto motivation.</li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Chercheur, conseiller en orientation, consultant, designer de jeux vidéo, professeur de yoga, cadre, philosophe, romancier,
+            thérapeute, psychologue, psychanalyste, psychiatre…
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Écrire son journal personnel, ses réflexions, des maximes du jour.</li>
+                <li>Retranscrire méthodiquement ses rêves.</li>
+                <li>Pratiquer la méditation, seul(e) et/ou dans un groupe hebdomadaire.</li>
+                <li>Essayer de décoder ses propres mécanismes psychologiques ; ceux qui mènent à la joie, la colère, l’anxiété, etc.</li>
+                <li>Pendant sept jours, écrire 25 mots pour se décrire, en tirer quelques conclusions, remarques…</li>
+                <li>Lire sur des sujets à portée spirituelle, psychologique ou philosophique.</li>
+                <li>Passer 20 à 30 minutes dans le silence, chaque jour.</li>
+                <li>Faire l’exercice de pardonner à quelqu’un ou à soi-même un geste, une parole, etc. Il s’agit ainsi d’éliminer des éléments
+                négatifs de sa vie, de s’en libérer.</li>
+                <li>Essayer une activité qu’on a toujours voulu faire, sans avoir osé passer à l’action.</li>
+                <li>Prendre du temps pour soi, dans un lieu où l’on se sent en paix.</li></ul>
+        </details>`;
+        var notice3 =   `<h2>Intelligence spatiale</h2>
+        <details><summary>Définition</summary>
+            Cette forme d’intelligence se définit par une excellente perception des choses et de son environnement.
+            L’aptitude à se repérer dans l’espace apparaît généralement dès la petite enfance. Un peu plus tard s’ajoute «
+            l’esprit de géométrie » et le sens de l’esthétisme. Voici quelques caractéristiques d’une personne à dominance
+            visuelle / spatiale :
+            <ul><li>imagination fertile;</li>
+                <li>mémoire visuelle infaillible;</li>
+                <li>crée des images mentales;</li>
+                <li>recherche l’équilibre et l’harmonie dans son environnement (sens de l’esthétisme);</li>
+                <li>perçoit les relations entre les objets et l’espace, sait évaluer les distances;</li>
+                <li>un sens inné de l’orientation;</li>
+                <li>capacité à visualiser ses désirs et à imaginer les moyens de les concrétiser;</li>
+                <li>s’exprime par des images et des comparaisons;</li>
+                <li>sens aigu de l’observation, de l’ensemble comme du détail.</li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Architecte, artiste, cartographe, chirurgien, cinéaste, coiffeur, décorateur, dentiste, designer, géographe,
+            graphiste, guide touristique, ingénieur, maquilleur, marin, paysagiste, pilote, plasticien, publiciste.
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Pratiquer des activités artistiques comme la sculpture, le dessin, l’art du costume ou du maquillage.</li>
+                <li>S’adonner à des loisirs tels que les casse-tête et les jeux d’observation.</li>
+                <li>S’exercer quotidiennement à visualiser, à imaginer des histoires, des scénarios, des dialogues, des parcours.</li>
+                <li>Réaménager l’une des pièces de la maison. Dessiner un plan, puis le mettre à exécution.</li>
+                <li>Se rendre dans une destination connue en empruntant des chemins différents.</li>
+                <li>Pratiquer un sport faisant appel au sens de l’orientation (ski, randonnée, course d’orientation, catamaran…).</li></ul>
+        </details>`;
+        var notice4 =   `<h2>Intelligence musicale </h2>
+        <details><summary>Définition</summary>
+            Cette forme d’intelligence appelle l’aptitude à avoir le sens du rythme, à ressentir, capter et produire une tonalité 
+            et un timbre; elle sous-tend l’appréciation des formes d’expression musicale. Les gens chez qui elle domine sont 
+            des auditifs purs. Ils savent comprendre les émotions ou les sentiments par le langage instrumental, vocal, les 
+            exclamations  de  joie,  de  peine,  et  savent  les  exprimer  de  la  même  façon.  L’intelligence  musicale  est  très 
+            complémentaire de l’intelligence corporelle / kinesthésique. Voici quelques caractéristiques observables : 
+            <ul><li>intuition basée sur le son, perception naturelle; 
+                <li>comprend la structure musicale; a « l’oreille absolue »; </li>
+                <li>reproduit, reconnaît ou crée des mélodies ou des rythmes, des sonates ou des concertos; </li>
+                <li>meilleure concentration et gestion du stress par la musique, le rythme; </li>
+                <li>créativité artistique ; </li>
+                <li>capacité  d’exprimer  ses  sentiments  et  de  ressentir  ceux  des  autres  au  moyen  du  chant,  de  la  danse,  de  la 
+                chorégraphie, du timbre de la voix; </li>
+                <li>capacité de mémoriser en utilisant les rythmes ou les sons. </li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Accordeur  de  piano,  chorégraphe,  danseur,  animateur,  éducateur  de  la  petite  enfance,  ingénieur  du  son, 
+            musicien,  musicothérapeute,  technicien  audiovisuel,  chef  d’orchestre,  chanteur,  compositeur,  imitateur,  « 
+            bruiteur » (au théâtre, cinéma). 
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Participer à un atelier de voix ou à une chorale. </li>
+                <li>S’exercer à reconnaître des sons différents, par exemple le chant des oiseaux. </li>
+                <li>Écouter des styles différents de musique; observer leur effet sur son humeur ou ses émotions. </li>
+                <li>Pratiquer un ou plusieurs instruments de musique, composer des suites d’accord, des chansons, etc. </li>
+                <li>Aller régulièrement à des spectacles musicaux (concerts, opéra, comédie musicale…).  </li></ul>
+        </details>`;
+        var notice5 =   `<h2>Intelligence écologique</h2>
+        <details><summary>Définition</summary>
+            L’intelligence  écologique  est  l’intelligence  de  base  de  l’être  humain,  celle  qui  lui  a  permis  de  survivre  depuis 
+            toujours. On la définit par l’aptitude à discerner l’organisation du vivant. Selon sa culture et son environnement, 
+            elle se traduira par la faculté de l’individu à composer avec les conditions dans lesquelles il vit, dans le but de les 
+            améliorer. Voici quelques caractéristiques qu’on observe chez une personne à forte intelligence naturaliste : 
+            <ul><li>aptitude à mettre les choses en lien avec l’environnement; </li>
+                <li>sensibilité aux modifications de l’environnement, par exemple aux conditions météorologiques; </li>
+                <li>perception sensorielle élevée; </li>
+                <li>ressent de forts liens avec la nature, les animaux, les phénomènes naturels; </li>
+                <li>sens de l’organisation, discernement; </li>
+                <li>habileté à classifier, cataloguer, comparer; </li>
+                <li>respect des autres « créatures » du monde ; l’écologie l’intéresse vraiment. </li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Agriculteur, agronome, anthropologue, chercheur en psychologie, sociologue, architecte-paysagiste, astronome, 
+            botaniste,  biologiste,  chef  cuisinier,  conservateur  de  musée,  fleuriste,  jardinier,  météorologue,  marin, 
+            explorateur, vétérinaire, zoologiste, documentariste animalier.  
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Faire des recherches sur les phénomènes naturels ou sur la faune et en exposer les résultats. </li>
+                <li>Marcher dans la nature, l’observer avec tous ses sens, et prendre conscience de ses effets sur son humeur ou 
+                ses émotions.  </li>
+                <li>Planter et prendre soin de plantes, fleurs, etc. </li>
+                <li>Observer les étoiles et savoir partager cette émotion avec d’autres éventuellement. </li>
+                <li>Passer du temps avec un animal. L’observer et tenter de décrire son « caractère », ses « pensées », comme s’il 
+                était un humain. </li>
+                <li>Se documenter sur les différentes sources d’énergie, sur la défense de l’environnement, sur l’écologie. </li>
+                <li>Passer du temps chez soi pour classer des objets, comme les livres ou les CD. </li></ul>
+        </details>`;
+        var notice6 =   `<h2>Intelligence kinesthésique</h2>
+        <details><summary>Définition</summary>
+            L’intelligence kinesthésique, c’est la faculté d’apprendre et de penser à partir de toutes les perceptions de son 
+            corps. Chez les personnes pour qui cette forme d’intelligence domine, on note un bon équilibre entre le corps et 
+            l’esprit. Elles aiment le  mouvement, utilisent tous leurs  sens pour se sentir dans l’action, savent  soigner  êtres 
+            humains, animaux. Voici comment on peut observer l’intelligence corporelle / kinesthésique : 
+            <ul><li>engagement physique dans la résolution d’un problème; </li>
+                <li>préférence marquée pour l’action immédiate; </li>
+                <li>communique par et avec le geste; </li>
+                <li>conscience de son langage corporel et de celui des autres; </li>
+                <li>le sens du toucher prédomine; </li>
+                <li>aptitude à faire plusieurs choses en même temps; </li>
+                <li>bonne gestion du stress; </li>
+                <li>apprend très rapidement, capacité d’observation et d’imitation. </li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Acrobate,  acteur,  clown,  danseur,  athlète,  agriculteur,  artisan,  chirurgien,  vétérinaire,  ergonome,  mécanicien, 
+            menuisier,  physiothérapeute,  ostéopathe,  kinésithérapeute,  pompier,  professeur  d’éducation  physique,  chef 
+            cuisinier, travailleur manuel. 
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Pratiquer un sport ou une activité physique. </li>
+                <li>Créer des choses de ses mains, par exemple par le bricolage. </li>
+                <li>Faire des jeux de rôle ou des mimes, de l’improvisation théâtrale. </li>
+                <li>En accomplissant ses tâches quotidiennes, prendre conscience de chaque geste. </li>
+                <li>Aiguiser ses cinq sens (toucher, odorat, vue, goût, sens auditif) en pratiquant des activités variées comme la 
+                cuisine, les arts plastiques, le yoga, la danse, etc. </li></ul>
+        </details>`;
+        var notice7 =   `<h2>Intelligence verbale</h2>
+        <details><summary>Définition</summary>
+            Les personnes chez qui elle domine présentent une grande sensibilité aux sons, à la signification des mots et aux 
+            fonctions du langage. Ces individus sont souvent des amoureux de la langue et de grands lecteurs. Voici quelques 
+            caractéristiques d’une personne à dominance verbale / linguistique : 
+            <ul><li>pense en mots plutôt qu’en images; </li>
+                <li>aime parler, écrire et expliquer; </li>
+                <li>dotée d’un sens de l’humour qui se traduit entre autres par les calembours et les jeux de mots; </li>
+                <li>vocabulaire varié et discours adapté à son interlocuteur; </li>
+                <li>aptitude à communiquer ses idées, ses pensées et ses émotions par des mots; </li>
+                <li>pouvoir de persuasion, aptitude à débattre et argumenter; </li>
+                <li>a de la répartie. </li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Animateur de radio ou de télévision, acteur, scénariste, attaché de presse, avocat, écrivain, éditeur, historien, 
+            interprète, journaliste, négociateur, politicien, professeur, traducteur, vendeur. 
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>Faire des mots croisés ou s’adonner à des jeux de vocabulaire. </li>
+                <li>Participer à des discussions. </li>
+                <li>Apprendre un nouveau mot, une expression ou un adage chaque jour et s’efforcer de l’utiliser dans une 
+                conversation par la suite. </li>
+                <li>Chercher l’origine de mots, d’expressions, et leur signification exacte. </li>
+                <li>Écrire une histoire, faire des biographies, des interviews, etc. </li>
+                <li>Apprendre par cœur des histoires drôles et les raconter. </li>
+                <li>Aller au théâtre, écouter les humoristes, etc. </li>
+                <li>Apprendre et pratiquer des langues étrangères, voyager. </li>
+                <li>Lire les journaux, des magazines, des romans, de la poésie, etc. </li></ul>
+        </details>`;
+        var notice8 =   `<h2>Intelligence logique</h2>
+        <details><summary>Définition</summary>
+            Les personnes chez qui cette forme d’intelligence prédomine présentent une grande sensibilité aux modèles 
+            logiques que l’on retrouve par exemple dans les sciences, les mathématiques, l’économie, le droit, etc. Elles 
+            excellent également à soutenir des raisonnements solides et à analyser l’information qu’elles reçoivent. 
+            Voici quelques caractéristiques d’une personne à dominance logique / mathématique : 
+            <ul><li>sens de la déduction ; </li>
+                <li>s'explique souvent au moyen d’exemples précis et concrets ; </li>
+                <li>facilité à composer avec l’abstrait, à utiliser les symboles, les figures géométriques, les formules ; </li>
+                <li>raisonnement scientifique: aime démontrer des faits par l'expérimentation, preuves à l’appui;  </li>
+                <li>accepte difficilement l’idée du hasard et préfère les explications logiques ; </li>
+                <li>organisation efficace et expression claire de sa pensée ; </li>
+                <li>esprit d’analyse et de synthèse ; </li>
+                <li>fonctionne souvent par « essai-erreur » ; </li>
+                <li>aime trouver sa propre solution ou élaborer ses propres conclusions. </li></ul>
+        </details>
+        <details><summary>Professions</summary>
+            Actuaire, analyste, avocat, juriste, banquier, comptable, informaticien, cuisinier, économiste, ingénieur, 
+            mécanicien, médecin, pharmacien, programmeur, scientifique, astrophysicien, urbaniste, géomètre, détective 
+            privé. 
+        </details>
+        <details><summary>Activités</summary>
+            <ul><li>S’exercer à résoudre des problèmes mathématiques ou des énigmes. </li>
+                <li>Jouer à des jeux de stratégie. </li>
+                <li>Regarder des publicités d’un œil critique en essayant de déterminer les moyens utilisés pour amener le 
+                consommateur à acheter. </li>
+                <li>Regarder des émissions scientifiques à la télévision. </li>
+                <li>S’initier à un langage informatique, à une science. </li>
+                <li>Lire des romans policiers. </li>
+                <li>Apprendre et pratiquer la généalogie, l’astronomie, l’astrologie, etc. </li></ul>
+        </details>`;
+
+    function calcul(){
+       var Interpersonnelle = flag[5]+flag[14]+flag[17]+flag[25]+flag[40]+flag[42]+flag[55]+flag[60]+flag[71]+flag[78];
+       var Intrapersonnelle = flag[4]+flag[15]+flag[24]+flag[27]+flag[34]+flag[45]+flag[50]+flag[59]+flag[70]+flag[73];
+       var Spatiale = flag[6]+flag[11]+flag[18]+flag[31]+flag[35]+flag[38]+flag[56]+flag[57]+flag[72]+flag[79];
+       var Musicale = flag[8]+flag[10]+flag[20]+flag[30]+flag[36]+flag[44]+flag[51]+flag[58]+flag[66]+flag[76];
+       var Ecologique = flag[1]+flag[13]+flag[21]+flag[26]+flag[37]+flag[47]+flag[54]+flag[61]+flag[67]+flag[75];
+       var Kinesthesique = flag[3]+flag[16]+flag[22]+flag[32]+flag[43]+flag[46]+flag[52]+flag[64]+flag[69]+flag[77];
+       var Verbale = flag[2]+flag[9]+flag[19]+flag[29]+flag[39]+flag[48]+flag[49]+flag[62]+flag[65]+flag[80];
+       var Logique = flag[7]+flag[12]+flag[23]+flag[28]+flag[33]+flag[41]+flag[53]+flag[63]+flag[68]+flag[74];
+
+       document.getElementById("bar1").setAttribute("width", Interpersonnelle * 40 +"px") ;
+       document.getElementById("bar2").setAttribute("width", Intrapersonnelle * 40 +"px") ;
+       document.getElementById("bar3").setAttribute("width", Spatiale * 40 +"px") ;
+       document.getElementById("bar4").setAttribute("width", Musicale * 40 +"px") ;
+       document.getElementById("bar5").setAttribute("width", Ecologique * 40 +"px") ;
+       document.getElementById("bar6").setAttribute("width", Kinesthesique * 40 +"px") ;
+       document.getElementById("bar7").setAttribute("width", Verbale * 40 +"px") ;
+       document.getElementById("bar8").setAttribute("width", Logique * 40 +"px") ;
+
+       document.getElementById("result").style.visibility = "visible" ;
+    }
+    function showNotice(notice){
+        document.getElementById("notice").innerHTML=notice;
+        scroll(0, 10000);
+    }
+    document.getElementById("bar1").addEventListener("click",function(){showNotice(notice1)});
+    document.getElementById("bar2").addEventListener("click",function(){showNotice(notice2)});
+    document.getElementById("bar3").addEventListener("click",function(){showNotice(notice3)});
+    document.getElementById("bar4").addEventListener("click",function(){showNotice(notice4)});
+    document.getElementById("bar5").addEventListener("click",function(){showNotice(notice5)});
+    document.getElementById("bar6").addEventListener("click",function(){showNotice(notice6)});
+    document.getElementById("bar7").addEventListener("click",function(){showNotice(notice7)});
+    document.getElementById("bar8").addEventListener("click",function(){showNotice(notice8)});
+
+
+
+    var q= [{n:1, m:"J'aime les livres parlant d'animaux."},
+            {n:2, m:"J'aime raconter des anecdotes et des plaisanteries."},
+            {n:3, m:"Je bouge constamment et je préfère être en action que de rester assis."},
+            {n:4, m:"J'aime écrire mes pensées dans un journal personnel."},
+            {n:5, m:"J'aime organiser des activités sociales."},
+            {n:6, m:"À la lecture de la description d'un lieu, je me le représente facilement."},
+            {n:7, m:"J'aime comprendre le fonctionnement des choses."},
+            {n:8, m:"Je reproduis facilement des rythmes avec des objets."},
+            {n:9, m:"J'aime participer à des présentations orales."},
+            {n:10, m:"J'ai du rythme quand je danse."},
+            {n:11, m:"J'aime faire de la décoration."},
+            {n:12, m:"J'aime organiser l'information d'une façon structurée."},
+            {n:13, m:"Je suis passionné par les phénomènes naturels."},
+            {n:14, m:"Je préfère le travail d'équipe au travail individuel."},
+            {n:15, m:"J'aime me retrouver seul(e) pour travailler."},
+            {n:16, m:"J'aime la danse."},
+            {n:17, m:"Je me préoccupe du bien-être des autres."},
+            {n:18, m:"Je visualise facilement des objets ou des situations dans ma tête."},
+            {n:19, m:"J'adore écrire des lettres."},
+            {n:20, m:"Je suis très sensible à l'intonation et au ton."},
+            {n:21, m:"J'aime observer les oiseaux."},
+            {n:22, m:"J'aime manipuler des objets et faire des maquettes."},
+            {n:23, m:"J'aime faire appel à différentes stratégies pour résoudre des difficultés."},
+            {n:24, m:"Les gens qui m'entourent me perçoivent  une personne sage et me consultent pour avoir mon avis."},
+            {n:25, m:"J'aime rencontrer de nouvelles personnes."},
+            {n:26, m:"Je visite le zoo avec intérêt."},
+            {n:27, m:"J'ai besoin de travailler à mon rythme dans des projets que j'ai choisis."},
+            {n:28, m:"J'ai des arguments logiques pour expliquer ce que je fais."},
+            {n:29, m:"J'ai de la facilité en orthographe."},
+            {n:30, m:"J'aime taper des mains ou du pied en écoutant la musique."},
+            {n:31, m:"J'aime réaliser des cartes d'organisation d'idées."},
+            {n:32, m:"Je suis très habile à démonter et à remonter des objets (moteur, calculatrice...)."},
+            {n:33, m:"J’aime faire du calcul mental (jogging mathématique)."},
+            {n:34, m:"J’aime me perdre dans mes réflexions."},
+            {n:35, m:"Je m’oriente facilement dans un nouvel endroit."},
+            {n:36, m:"J’aime jouer d’un instrument de musique."},
+            {n:37, m:"J'aime les photographies de paysages illustrant la faune et la flore."},
+            {n:38, m:"J'aime les arts plastiques."},
+            {n:39, m:"J'aime les jeux impliquant des mots (scrabble, mots croisés, mots mystères...)."},
+            {n:40, m:"Je suis ouvert aux opinions des autres."},
+            {n:41, m:"J'aime écouter des émissions scientifiques."},
+            {n:42, m:"Je m'adapte facilement aux différentes personnes (âge, culture, valeurs...) et y trouve de l’intérêt."},
+            {n:43, m:"J'aime regarder des événements sportifs et en parler."},
+            {n:44, m:"Je peux facilement identifier divers styles de musique."},
+            {n:45, m:"Mes objectifs d'avenir sont bien définis."},
+            {n:46, m:"J'aime improviser et jouer au théâtre."},
+            {n:47, m:"Je collectionne des objets (animaux, insectes) se rapportant à la nature."},
+            {n:48, m:"J'aime connaître la signification des mots."},
+            {n:49, m:"J'aime expliquer aux autres ce que j'ai appris."},
+            {n:50, m:"J'ai de la facilité à identifier les émotions que je ressens."},
+            {n:51, m:"J'aime fredonner des mélodies."},
+            {n:52, m:"Quand j'ai les mains libres, j'aime jouer avec les objets qui sont à ma portée."},
+            {n:53, m:"J'ai de la facilité à organiser mentalement mes idées."},
+            {n:54, m:"J'ai toujours eu ou voulu avoir des animaux domestiques."},
+            {n:55, m:"Je saisis facilement les sentiments et les émotions des autres."},
+            {n:56, m:"J'adore dessiner."},
+            {n:57, m:"J'aime rassembler des casse-tête."},
+            {n:58, m:"J'aime chanter sans musique (a capella)."},
+            {n:59, m:"Je connais bien mes goûts et mes préférences."},
+            {n:60, m:"Je m’intéresse aux idées des autres."},
+            {n:61, m:"J'aime installer des mangeoires pour les animaux sauvages ou les oiseaux."},
+            {n:62, m:"Je mémorise facilement ce que je lis."},
+            {n:63, m:"J'aime les énigmes, les jeux d'enquête et de stratégies."},
+            {n:64, m:"J'aime les arts parce que je peux travailler avec mes mains (dessin, couture...)."},
+            {n:65, m:"J'aime écouter des histoires et des poèmes."},
+            {n:66, m:"Je suis sensible aux bruits de mon environnement (la pluie, la photocopieuse, l’horloge...)."},
+            {n:67, m:"J'aime aller à la ferme."},
+            {n:68, m:"J'aime les cours de mathématique."},
+            {n:69, m:"J'aime pratiquer des sports."},
+            {n:70, m:"Presque toutes les questions m’inspirent une opinion précise et assurée."},
+            {n:71, m:"J'aide les gens à résoudre leurs problèmes et leurs conflits."},
+            {n:72, m:"J'ai un bon sens de l'observation."},
+            {n:73, m:"Je n'ai pas besoin de récompenses pour être motivé."},
+            {n:74, m:"Je comprends rapidement, je fais facilement des liens entre les idées."},
+            {n:75, m:"Je me sens bien lorsque je suis dans la forêt."},
+            {n:76, m:"Je trouve facilement des ressemblances entre des mélodies."},
+            {n:77, m:"J'aime imiter les gestes des autres."},
+            {n:78, m:"J'aime les sports d'équipe et les activités de coopération."},
+            {n:79, m:"À partir d'un plan, je m’imagine facilement le produit final."},
+            {n:80, m:"J'ai un grand intérêt pour les langues étrangères."}];
+    var quest = document.getElementById("quest");
+    var flag=[];
+    function flipflop(t){
+        flag[t]=flag[t]==0?1:0;
+        document.getElementById("c"+t).style.backgroundColor = flag[t]==0?"rgb(220, 220, 220)":"rgb(143, 194, 252)";
+    }
+    function init(){
+        for (const ch of q) {
+            quest.innerHTML += '<div class="tuile" id="c'+ch.n+'" onClick=flipflop("'+ch.n+'")>'+ch.m+'</div>';
+            flag[ch.n]=0;
+            target=document.getElementById('c'+ch.n);
+        }
+    }
+</script>
+</html>
+
